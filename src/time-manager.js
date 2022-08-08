@@ -1,7 +1,7 @@
 export class TimeManager {
     timeManagerOperationState = "paused";
     state = "can-work"; // or "need-rest"
-    allowedWorkTime = 20*60; // default is 20 mins
+    allowedWorkTime = 3*60; // default is 20 mins
     sufficientRestTime = 5*60;
     timeIn = 0;
     timeOut = 0;
@@ -30,18 +30,22 @@ export class TimeManager {
     constructor(webcamData, emitter) {
         this.webcamData = webcamData;
         this.emitter = emitter;
-        // document.addEventListener('visibilitychange', this.checkTabFocused);
+        document.addEventListener('visibilitychange', (event) => {this.checkTabFocused()});
     }
 
-    // checkTabFocused() {
-    //     if (document.visibilityState === 'visible') {
-    //       console.log('✅ browser tab has focus');
-    //       this.timeInterval = 1000;
-    //     } else {
-    //       console.log('⛔️ browser tab does NOT have focus');
-    //       this.timeInterval = 50;
-    //     }
-    // }
+    checkTabFocused() {
+        if (document.visibilityState === 'visible') {
+          console.log('✅ browser tab has focus');
+          this.allowedWorkTime = (this.allowedWorkTime - this.timeIn)*2 + this.timeIn;
+          console.log("new allowed worktime:", this.allowedWorkTime);
+        } else {
+          console.log('⛔️ browser tab does NOT have focus');
+          console.log("allowedWorkTime", this.allowedWorkTime);
+          console.log("timeIn: ", this.timeIn);
+          this.allowedWorkTime = (this.allowedWorkTime - this.timeIn)/2 + this.timeIn;
+          console.log("new allowed worktime:", this.allowedWorkTime);
+        }
+    }
 
     async loadModel() {
         await faceapi.loadTinyFaceDetectorModel(this.faceDetectionModelFolderPath);
@@ -126,14 +130,12 @@ export class TimeManager {
         // this.timeManagerSessionId = setInterval(() => {
         //     this.detectFace();
         // }, 1000);
-        while (this.engineIsRunning) {
-            console.log("This method runs");
-            await this.detectFace();
-            await this.sleep(this.timeInterval);
-            console.log("time in", this.timeIn);
-            console.log("time out", this.timeOut);
-        }
-    }
+        // console.log("This method runs");
+        await this.detectFace();
+        // await this.sleep(this.timeInterval);
+        console.log("time in", this.timeIn);
+        console.log("time out", this.timeOut);
+}
 
     // async start() {
     //     // this.timeManagerOperationState = "running";
@@ -202,6 +204,7 @@ export class TimeManager {
     
     showStandUpNotification() {
         //window.api.showStandupNotification();
+        let notification = new Notification("Hi there!");
     }
 
     hideStandUpNotification() {

@@ -20,6 +20,7 @@ export default {
       canvas: null,
       emitter: null,
       timeManager: null,
+      worker: null,
     }
   },
   mounted() {
@@ -34,6 +35,11 @@ export default {
     this.emitter.on('update-time', (event) => {this.increaseTimeIn()});
     // this.timeManager = new TimeManager(this.video);
     // console.log(this.timeManager);
+    this.worker = new Worker("/src/worker.js");
+    this.worker.onmessage = async (event) => {
+      await this.timeManager.start();
+      this.worker.postMessage([]);
+    }
   },
   computed: {
     ...mapGetters([
@@ -53,7 +59,8 @@ export default {
       // console.log(timeManager);
       // this.increaseTimeIn(); // ok worked!
       await this.timeManager.loadModel();
-      this.timeManager.start();
+      // this.timeManager.start();
+      this.worker.postMessage([]);
     }, 
     stop() {
       this.timeManager.stop();
