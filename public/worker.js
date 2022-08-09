@@ -4,7 +4,12 @@ console.log("Run worker successfully");
 
 onmessage = (event) => {
     // console.log("Received command from UI");
-    detected = true;
+    if (event.data[0] === "start") {
+        detected = true;
+    }
+    if (event.data[0] === "stop") {
+        detected = false;
+    }
 }
 
 setInterval(() => {

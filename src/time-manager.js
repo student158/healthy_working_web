@@ -1,14 +1,16 @@
+import {SoundManager} from "./sound-manager";
+
 export class TimeManager {
     timeManagerOperationState = "paused";
     state = "can-work"; // or "need-rest"
-    allowedWorkTime = 3*60; // default is 20 mins
-    sufficientRestTime = 5*60;
+    allowedWorkTime = 0.2*60; // default is 20 mins
+    sufficientRestTime = 0.2*60;
     timeIn = 0;
     timeOut = 0;
-    // soundManager = new SoundManager();
+    soundManager = new SoundManager();
 
-    standUpNotification = null;
-    canContinueNotification = null;
+    standUpNotification;
+    canContinueNotification;
     standUpNotificationIsShown = false;
     canContinueNotificationIsShown = false;
     // after the app notify, if the user stand up and move outside -> change to true
@@ -16,8 +18,8 @@ export class TimeManager {
 
     faceDetectionModelFolderPath = "/face-api/models";
 
-    sendOperationDataToDocumentEvent;
-    sendOperationDataToDocumentEventName = "fromTimeManager-sendData";
+    // sendOperationDataToDocumentEvent;
+    // sendOperationDataToDocumentEventName = "fromTimeManager-sendData";
 
     // ID of setInterval method, use when stop the time manager
     timeManagerSessionId;
@@ -27,10 +29,12 @@ export class TimeManager {
     engineIsRunning = true;
 
     /**Track time user sit, trigger notification */
-    constructor(webcamData, emitter) {
+    constructor(webcamData, emitter, appStore) {
         this.webcamData = webcamData;
         this.emitter = emitter;
-        document.addEventListener('visibilitychange', (event) => {this.checkTabFocused()});
+        this.appStore = appStore;
+        // console.log("appStore: ", appStore);
+        // document.addEventListener('visibilitychange', (event) => {this.checkTabFocused()});
     }
 
     checkTabFocused() {
@@ -66,6 +70,7 @@ export class TimeManager {
 
                 if (this.timeIn >= this.allowedWorkTime) {
                     this.state = "need-rest";
+                    this.appStore.dispatch("changeUserStateToRest");
                     this.timeOut = 0;
                     // reset variable in the need-rest case
                     this.standUpNotificationIsShown = false;
@@ -96,7 +101,7 @@ export class TimeManager {
                     this.showStandUpNotification();
                     this.standUpNotificationIsShown = true;
                 }
-                // this.soundManager.notifyStandUp();
+                this.soundManager.notifyStandUp();
             } 
             else {
                 this.timeOut ++;
@@ -109,13 +114,17 @@ export class TimeManager {
                 }
                 if (this.timeOut >= this.sufficientRestTime) {
                     this.state = "can-work";
+                    this.appStore.dispatch("changeUserStateToWork");
                     this.timeIn = 0;
                     this.showCanWorkNotification();
                     this.canContinueNotificationIsShown = true;
                 }
             }
         }
-        this.emitter.emit("update-time");
+        this.appStore.dispatch("updateTimeIn", this.timeIn);
+        this.appStore.dispatch("updateTimeOut", this.timeOut);
+        // this.emitter.emit("update-time", {timeIn: this.timeIn});
+
     }
 
     sleep(ms) {
@@ -163,6 +172,14 @@ export class TimeManager {
         this.timeIn = 0;
         this.timeOut = 0;
         this.state = "can-work";
+        try {
+            this.standUpNotification.close();
+        }
+        catch(err) {};
+        try {
+            this.canContinueNotification.close();
+        }
+        catch(err) {};
         this.standUpNotification = null;
         this.canContinueNotification = null;
         this.standUpNotificationIsShown = false;
@@ -196,25 +213,27 @@ export class TimeManager {
 
     hideCanWorkNotification() {
         //window.api.hideCanWorkNotification();
+        this.canContinueNotification.close();
     }
     
     showCanWorkNotification() {
         //window.api.showCanWorkNotification();
+        this.canContinueNotification = new Notification("✔ You can continue working!", {requireInteraction: true, icon: "/assets/notification_icon/working.png", body: "(Auto hide when user continues working)"});
     }
     
     showStandUpNotification() {
         //window.api.showStandupNotification();
-        let notification = new Notification("Hi there!");
+        this.standUpNotification = new Notification("⚠ You should stand up!!!", {requireInteraction: true, icon: "/assets/notification_icon/exercise.png", body: "(Auto hide when user leaves table)"});
     }
 
     hideStandUpNotification() {
-        //window.api.hideStandUpNotification();
+        this.standUpNotification.close();
     }
 
-    // /**
-    //  * @param value float, scale 100 */
-    // changeVolume(value) {
-    //     this.soundManager.changeVolume(value);
-    // }
+    /**
+     * @param value float, scale 100 */
+    changeVolume(value) {
+        this.soundManager.changeVolume(value);
+    }
 
 }
