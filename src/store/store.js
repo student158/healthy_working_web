@@ -6,7 +6,8 @@ const state = {
     appIsRunning: false,
     workTime: 12,
     restTime: 12,
-    userState: "ready" // ready | work | rest
+    userState: "ready", // ready | work | rest
+    notificationVolume: 15,
 };
 
 const mutations = {
@@ -19,6 +20,9 @@ const mutations = {
     RESET_TIME_IN_OUT(state) {
         state.timeIn = 0;
         state.timeOut = 0;
+    },
+    UPDATE_NOTIFICATION_VOLUME(state, payload) {
+        state.notificationVolume = payload;
     },
     TURN_OFF(state) {
         state.appIsRunning = false;
@@ -53,6 +57,9 @@ const actions = {
     resetTimeInOut({commit}) {
         commit("RESET_TIME_IN_OUT");
     },
+    updateNotificationVolume({commit}, volumeVal) {
+        commit("UPDATE_NOTIFICATION_VOLUME", volumeVal);
+    },
     appTurnOff({commit}) {
         commit("TURN_OFF");
     },
@@ -83,6 +90,7 @@ const getters = {
     workTime: (state) => state.workTime,
     restTime: (state) => state.restTime,
     userState: (state) => state.userState,
+    notificationVolume: (state) => state.notificationVolume,
 }
 
 const store = createStore({
