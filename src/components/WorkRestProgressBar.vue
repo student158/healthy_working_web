@@ -1,13 +1,13 @@
 <template>
     <div class="work-rest-progress-bar mt-3 mb-3">
         <div v-if="userState === 'work'">
-            <div>Worked:</div>
+            <div>Working:</div>
             <div class="progress">
                 <div class="progress-bar bg-warning" role="progressbar" :style="progressWorkBarPercentage" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
         </div>
         <div v-else-if="userState === 'rest'">
-            <div>Rested:</div>
+            <div>Resting:</div>
             <div class="progress">
                 <div class="progress-bar bg-success" role="progressbar" :style="progressRestBarPercentage" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
             </div>
