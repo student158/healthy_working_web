@@ -4,8 +4,8 @@ const state = {
     timeIn: 0,
     timeOut: 0,
     appIsRunning: false,
-    workTime: 12,
-    restTime: 12,
+    workTime: 25*60,
+    restTime: 5*60,
     userState: "ready", // ready | work | rest
     notificationVolume: 15,
     camAdjustmentModalState: "off", // off | on

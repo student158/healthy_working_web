@@ -3,8 +3,8 @@ import {SoundManager} from "./sound-manager";
 export class TimeManager {
     timeManagerOperationState = "paused";
     state = "can-work"; // or "need-rest"
-    allowedWorkTime = 0.2*60; // default is 20 mins
-    sufficientRestTime = 0.2*60;
+    allowedWorkTime = 25*60; // default is 20 mins
+    sufficientRestTime = 5*60;
     timeIn = 0;
     timeOut = 0;
     soundManager = new SoundManager();
