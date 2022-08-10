@@ -36,20 +36,16 @@ export class TimeManager {
         this.emitter = emitter;
         this.appStore = appStore;
         // console.log("appStore: ", appStore);
-        // document.addEventListener('visibilitychange', (event) => {this.checkTabFocused()});
+        document.addEventListener('visibilitychange', (event) => {this.checkTabFocused()});
     }
 
     checkTabFocused() {
         if (document.visibilityState === 'visible') {
           console.log('✅ browser tab has focus');
-          this.allowedWorkTime = (this.allowedWorkTime - this.timeIn)*2 + this.timeIn;
-          console.log("new allowed worktime:", this.allowedWorkTime);
+          this.elapseSpeed = 1;
         } else {
           console.log('⛔️ browser tab does NOT have focus');
-          console.log("allowedWorkTime", this.allowedWorkTime);
-          console.log("timeIn: ", this.timeIn);
-          this.allowedWorkTime = (this.allowedWorkTime - this.timeIn)/2 + this.timeIn;
-          console.log("new allowed worktime:", this.allowedWorkTime);
+          this.elapseSpeed = 2;
         }
     }
 
