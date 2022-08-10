@@ -8,6 +8,7 @@ const state = {
     restTime: 12,
     userState: "ready", // ready | work | rest
     notificationVolume: 15,
+    camAdjustmentModalState: "off", // off | on
 };
 
 const mutations = {
@@ -45,6 +46,14 @@ const mutations = {
     CHANGE_USER_STATE_TO_REST(state) {
         state.userState = "rest";
     },
+    UPDATE_CAM_ADJUSTMENT_MODAL_STATE(state) {
+        if (state.camAdjustmentModalState === "off") {
+            state.camAdjustmentModalState = "on";
+        }
+        else {
+            state.camAdjustmentModalState = "off";
+        }
+    }
 };
 
 const actions = {
@@ -81,6 +90,9 @@ const actions = {
     changeUserStateToRest({commit}) {
         commit("CHANGE_USER_STATE_TO_REST");
     },
+    updateCamAdjustmentModalState({commit}) {
+        commit("UPDATE_CAM_ADJUSTMENT_MODAL_STATE");
+    },
 };
 
 const getters = {
@@ -91,6 +103,7 @@ const getters = {
     restTime: (state) => state.restTime,
     userState: (state) => state.userState,
     notificationVolume: (state) => state.notificationVolume,
+    camAdjustmentModalState: (state) => state.camAdjustmentModalState,
 }
 
 const store = createStore({
