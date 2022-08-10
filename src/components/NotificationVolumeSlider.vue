@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="mt-3 mb-3">
         <label for="volume-slider">Volume: </label>
         <input type="range" min="0" max="100" id="volume-slider" @input="updateVolume" v-model="volumeVal">
         <span id="volume-value">{{volumeVal}} %</span>

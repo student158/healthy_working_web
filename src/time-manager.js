@@ -28,6 +28,8 @@ export class TimeManager {
 
     engineIsRunning = true;
 
+    elapseSpeed = 1;
+
     /**Track time user sit, trigger notification */
     constructor(webcamData, emitter, appStore) {
         this.webcamData = webcamData;
@@ -64,7 +66,7 @@ export class TimeManager {
         let faceIsDetected = faceDetections.length >= 1;
         if (this.state === "can-work") {
             if (faceIsDetected) {
-                this.timeIn ++;
+                this.timeIn += this.elapseSpeed;
                 this.timeOut = 0;
                 // console.log("time in: ", this.timeIn, "time out: ", this.timeOut);
 
@@ -85,7 +87,7 @@ export class TimeManager {
                     this.timeOut = 0;
                 }
             } else {
-                this.timeOut ++;
+                this.timeOut += this.elapseSpeed;
                 // console.log("time in: ", this.timeIn, "time out: ", this.timeOut);
                 // can work is actually set the timeIn to 0. If healthy + rest enough -> timeIn 0 again
                 if (this.timeOut >= this.sufficientRestTime) {
@@ -95,7 +97,7 @@ export class TimeManager {
         } 
         else { //when this.state is "need-rest"
             if (faceIsDetected) {
-                this.timeIn ++;
+                this.timeIn += this.elapseSpeed;
                 // console.log("time in: ", this.timeIn, "time out: ", this.timeOut);
                 if (!this.standUpNotificationIsShown) {
                     this.showStandUpNotification();
@@ -104,7 +106,7 @@ export class TimeManager {
                 this.soundManager.notifyStandUp();
             } 
             else {
-                this.timeOut ++;
+                this.timeOut += this.elapseSpeed;
                 // console.log("time in: ", this.timeIn, "time out: ", this.timeOut);
                 if (this.standUpNotificationIsShown && !this.standUpNotificationDisappeared && this.timeOut >= 5) {
                     setTimeout(() => {

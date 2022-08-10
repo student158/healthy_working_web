@@ -1,22 +1,22 @@
 <template>
-  <h1>Healthy working</h1>
-  <UserStateImage />
-  <div>
-    <button @click="start()" class="btn btn-success" :disabled="appIsRunning">Start</button>
-    <button @click="stop()" class="btn btn-danger" :disabled="!appIsRunning">Stop</button>
-  </div>
-  <div>
+  <div class="app container text-center border border-2 mt-5">
+    <NavBar />
+    <UserStateImage />
+    <div class="mt-3">
+      <button @click="start()" class="btn btn-success" :disabled="appIsRunning">Start</button>
+      <button @click="stop()" class="btn btn-danger" :disabled="!appIsRunning">Stop</button>
+    </div>
     <WorkRestProgressBar/>
     <TimeSetUpPane/>
+    <NotificationVolumeSlider/>
+    <div style="position: absolute; visibility: hidden;" tabindex="-1" aria-hidden="true">
+        <video ref="inputVideo" autoplay muted id="videoin"></video>
+    </div>
   </div>
-  <NotificationVolumeSlider/>
-  <div style="position: absolute; visibility: hidden;" tabindex="-1" aria-hidden="true">
-      <video ref="inputVideo" autoplay muted id="videoin"></video>
-  </div>
-  <!-- <div>Time in: {{timeIn}}</div> -->
 </template>
 
 <script>
+import NavBar from "./components/NavBar.vue";
 import TimeSetUpPane from "./components/TimeSetUpPane.vue";
 import UserStateImage from "./components/UserStateImage.vue";
 import WorkRestProgressBar from "./components/WorkRestProgressBar.vue";
@@ -36,8 +36,6 @@ export default {
         this.video = this.$refs.inputVideo;
         // communicator with timeManager
         this.emitter = mitt();
-        console.log(typeof (this.video));
-        console.log(this.video);
         this.emitter.on("update-time", (event) => {
            this.updateTimeIn(event.timeIn); 
         });
@@ -96,6 +94,7 @@ export default {
       WorkRestProgressBar,
       TimeSetUpPane,
       NotificationVolumeSlider,
+      NavBar
     },
     watch: {
       workTime(newWorkTime, oldWorkTime) {
@@ -112,3 +111,9 @@ export default {
     }
 }
 </script>
+
+<style>
+.app {
+  width: 45%;
+}
+</style>

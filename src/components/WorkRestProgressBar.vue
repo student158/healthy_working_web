@@ -1,19 +1,21 @@
 <template>
-<div v-if="userState === 'work'">
-    <div>Worked:</div>
-    <div class="progress">
-        <div class="progress-bar" role="progressbar" aria-label="Basic example" :style="progressWorkBarPercentage" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+    <div class="work-rest-progress-bar mt-3 mb-3">
+        <div v-if="userState === 'work'">
+            <div>Worked:</div>
+            <div class="progress">
+                <div class="progress-bar bg-warning" role="progressbar" :style="progressWorkBarPercentage" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+        <div v-else-if="userState === 'rest'">
+            <div>Rested:</div>
+            <div class="progress">
+                <div class="progress-bar bg-success" role="progressbar" :style="progressRestBarPercentage" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+        <div v-else>
+            <div>App is ready!</div>
+        </div>
     </div>
-</div>
-<div v-else-if="userState === 'rest'">
-    <div>Rested:</div>
-    <div class="progress">
-        <div class="progress-bar" role="progressbar" aria-label="Basic example" :style="progressRestBarPercentage" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-    </div>
-</div>
-<div v-else>
-    <div>App is ready!</div>
-</div>
 </template>
 
 <script>
@@ -39,3 +41,10 @@ export default {
     },
 }
 </script>
+
+<style>
+.work-rest-progress-bar {
+    width: 45%;
+    margin: 0 auto;
+}
+</style>
