@@ -1,6 +1,6 @@
 # Healthy working (Web app)
 
-This is the web version of healthy working desktop app (https://github.com/student158/healthyWorkingDesktop). You can try the app here: https://app-healthyworking.netlify.app/
+You can try the app here: https://app-healthyworking.netlify.app/. There is also a desktop version of the app (https://github.com/student158/healthyWorkingDesktop).
 
 Motivation
 ---------
