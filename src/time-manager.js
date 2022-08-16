@@ -48,7 +48,8 @@ export class TimeManager {
           // this.elapseSpeed = 2.142857;
           // this.elapseSpeed = 2.1;
           // this.elapseSpeed = 2.25;
-          this.elapseSpeed = 3.75;
+          // this.elapseSpeed = 3.75;
+          this.elapseSpeed = 2.84;
         }
     }
 
