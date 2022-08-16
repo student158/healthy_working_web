@@ -47,7 +47,8 @@ export class TimeManager {
           console.log('⛔️ browser tab does NOT have focus');
           // this.elapseSpeed = 2.142857;
           // this.elapseSpeed = 2.1;
-          this.elapseSpeed = 2.25;
+          // this.elapseSpeed = 2.25;
+          this.elapseSpeed = 3.75;
         }
     }
 
